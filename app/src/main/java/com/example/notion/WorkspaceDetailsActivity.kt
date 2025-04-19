@@ -64,7 +64,7 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
                     if (content.isNotEmpty()) {
                         lifecycleScope.launch(Dispatchers.IO) {
                             val db = AppDatabase.getInstance(this@WorkspaceDetailsActivity)
-                            db.noteDao().insert(Note(workspaceName = originalName!!, content = content))
+                            db.noteDao().insert(Note(workspaceName = originalName!!, content = content, title = content))
                             val notes = db.noteDao().getNotesForWorkspace(originalName!!)
                             withContext(Dispatchers.Main) {
                                 noteAdapter.updateData(notes)

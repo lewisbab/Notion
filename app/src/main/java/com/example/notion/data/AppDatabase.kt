@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Workspace::class, Note::class], version = 2, exportSchema = false)
+@Database(entities = [Workspace::class, Note::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun workspaceDao(): WorkspaceDao
     abstract fun noteDao(): NoteDao  // ✅ add this

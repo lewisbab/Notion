@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".WorkspaceDetailsActivity" />
+        <activity android:name=".NoteEditorActivity" />
     </application>
 
 </manifest>

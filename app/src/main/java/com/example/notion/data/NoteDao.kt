@@ -1,21 +1,21 @@
 package com.example.notion.data
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface NoteDao {
     @Insert
-    suspend fun insert(note: Note)
+    suspend fun insert(note: Note): Long
 
     @Query("SELECT * FROM notes WHERE workspaceName = :workspace")
     suspend fun getNotesForWorkspace(workspace: String): List<Note>
 
-    @Query("UPDATE notes SET content = :content WHERE id = :id")
-    suspend fun updateNoteContent(id: Int, content: String)
+    @Query("SELECT * FROM notes WHERE id = :id")
+    suspend fun getNoteById(id: Int): Note?
 
     @Update
     suspend fun updateNote(note: Note)
+
+    @Delete
+    suspend fun deleteNote(note: Note)
 }

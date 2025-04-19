@@ -7,5 +7,7 @@ import androidx.room.PrimaryKey
 data class Note(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val workspaceName: String,
-    val content: String
+    val title: String = "Untitled",
+    val content: String,
+    val body: String = ""
 )

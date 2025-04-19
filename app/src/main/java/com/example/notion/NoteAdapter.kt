@@ -3,6 +3,7 @@ package com.example.notion
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
@@ -30,38 +31,15 @@ class NoteAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val note = notes[position]
-        holder.contentTextView.text = note.content
-
+        holder.contentTextView.text = note.title
         holder.itemView.setOnClickListener {
-            val input = TextView(holder.itemView.context).apply {
-                text = note.content
-                setPadding(24, 24, 24, 24)
-            }
-
-            val edit = android.widget.EditText(holder.itemView.context).apply {
-                setText(note.content)
-            }
-
-            AlertDialog.Builder(holder.itemView.context)
-                .setTitle("Edit Note")
-                .setView(edit)
-                .setPositiveButton("Save") { _, _ ->
-                    val newContent = edit.text.toString().trim()
-                    if (newContent.isNotEmpty() && newContent != note.content) {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val db = AppDatabase.getInstance(holder.itemView.context)
-                            db.noteDao().updateNote(note.copy(content = newContent))
-                            val updatedNotes = db.noteDao().getNotesForWorkspace(workspaceName)
-                            withContext(Dispatchers.Main) {
-                                onNoteUpdated(updatedNotes)
-                            }
-                        }
-                    }
-                }
-                .setNegativeButton("Cancel", null)
-                .show()
+            val context = holder.itemView.context
+            val intent = android.content.Intent(context, NoteEditorActivity::class.java)
+            intent.putExtra("note_id", note.id)
+            context.startActivity(intent)
         }
     }
+
 
     override fun getItemCount(): Int = notes.size
 
