@@ -1,6 +1,8 @@
 package com.example.notion
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -31,6 +33,7 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
         val deleteButton = findViewById<Button>(R.id.btnDelete)
         val notesRecyclerView = findViewById<RecyclerView>(R.id.notesRecyclerView)
         val fabAddNote = findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fabAddNote)
+        val tagFilterEdit = findViewById<EditText>(R.id.etTagFilter)
 
         originalName = intent.getStringExtra("workspace_name")
         titleTextView.text = originalName
@@ -44,13 +47,28 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
         notesRecyclerView.layoutManager = LinearLayoutManager(this)
         notesRecyclerView.adapter = noteAdapter
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            val db = AppDatabase.getInstance(this@WorkspaceDetailsActivity)
-            val notes = db.noteDao().getNotesForWorkspace(originalName!!)
-            withContext(Dispatchers.Main) {
-                noteAdapter.updateData(notes)
+        fun loadNotesFiltered(filter: String = "") {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val db = AppDatabase.getInstance(this@WorkspaceDetailsActivity)
+                val allNotes = db.noteDao().getNotesForWorkspace(originalName!!)
+                val filtered = if (filter.isBlank()) allNotes else allNotes.filter {
+                    it.tags.contains(filter, ignoreCase = true)
+                }
+                withContext(Dispatchers.Main) {
+                    noteAdapter.updateData(filtered)
+                }
             }
         }
+
+        loadNotesFiltered()
+
+        tagFilterEdit.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                loadNotesFiltered(s.toString())
+            }
+        })
 
         fabAddNote.setOnClickListener {
             val input = EditText(this)
@@ -64,11 +82,16 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
                     if (content.isNotEmpty()) {
                         lifecycleScope.launch(Dispatchers.IO) {
                             val db = AppDatabase.getInstance(this@WorkspaceDetailsActivity)
-                            db.noteDao().insert(Note(workspaceName = originalName!!, content = content, title = content))
-                            val notes = db.noteDao().getNotesForWorkspace(originalName!!)
-                            withContext(Dispatchers.Main) {
-                                noteAdapter.updateData(notes)
-                            }
+                            db.noteDao().insert(
+                                Note(
+                                    workspaceName = originalName!!,
+                                    title = content,
+                                    content = content,
+                                    createdAt = System.currentTimeMillis(),
+                                    updatedAt = System.currentTimeMillis()
+                                )
+                            )
+                            loadNotesFiltered(tagFilterEdit.text.toString())
                         }
                     }
                 }
