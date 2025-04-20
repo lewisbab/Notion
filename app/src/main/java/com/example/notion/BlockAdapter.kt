@@ -6,45 +6,50 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notion.data.Block
 
 class BlockAdapter(
     private var blocks: MutableList<Block>,
     private val onBlockChanged: (Block) -> Unit,
+    private val onStartDrag: (view: View, position: Int, block: Block) -> Unit
 ) : RecyclerView.Adapter<BlockAdapter.BlockViewHolder>() {
 
     inner class BlockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val etTitle: EditText = itemView.findViewById(R.id.etBlockTitle)
-        val etContent: EditText = itemView.findViewById(R.id.etBlockContent)
+        private val etTitle: EditText = itemView.findViewById(R.id.etBlockTitle)
+        private val etContent: EditText = itemView.findViewById(R.id.etBlockContent)
+        private val ivDragHandle: ImageView = itemView.findViewById(R.id.ivDragHandle)
 
-        fun bind(block: Block) {
+        fun bind(block: Block, position: Int) {
             etTitle.setText(block.title)
             etContent.setText(block.content)
 
             etTitle.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
-                    val pos = adapterPosition
-                    if (pos != RecyclerView.NO_POSITION) {
-                        blocks[pos] = blocks[pos].copy(title = s.toString())
-                        onBlockChanged(blocks[pos])
-                    }
+                    blocks[position] = blocks[position].copy(title = s.toString())
+                    onBlockChanged(blocks[position])
                 }
+
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             })
 
             etContent.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
-                    val pos = adapterPosition
-                    if (pos != RecyclerView.NO_POSITION) {
-                        blocks[pos] = blocks[pos].copy(content = s.toString())
-                        onBlockChanged(blocks[pos])
-                    }
+                    blocks[position] = blocks[position].copy(content = s.toString())
+                    onBlockChanged(blocks[position])
                 }
+
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             })
+
+            ivDragHandle.setOnTouchListener { v, _ ->
+                onStartDrag(itemView, position, blocks[position])
+                true
+            }
         }
     }
 
@@ -54,7 +59,7 @@ class BlockAdapter(
     }
 
     override fun onBindViewHolder(holder: BlockViewHolder, position: Int) {
-        holder.bind(blocks[position])
+        holder.bind(blocks[position], position)
     }
 
     override fun getItemCount(): Int = blocks.size

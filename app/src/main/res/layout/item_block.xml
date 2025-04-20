@@ -5,15 +5,33 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <EditText
-        android:id="@+id/etBlockTitle"
+    <!-- Horizontal container for title + drag handle -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Block Title"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:inputType="text"
-        android:background="@android:color/transparent" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/etBlockTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Block Title"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:inputType="text"
+            android:background="@android:color/transparent" />
+
+        <ImageView
+            android:id="@+id/ivDragHandle"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Drag handle"
+            android:src="@android:drawable/ic_menu_sort_by_size"
+            android:padding="4dp" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/etBlockContent"

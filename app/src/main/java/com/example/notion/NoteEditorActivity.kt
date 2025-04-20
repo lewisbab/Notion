@@ -1,11 +1,14 @@
 package com.example.notion
 
 import android.os.Bundle
+import android.view.DragEvent
+import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,16 +41,73 @@ class NoteEditorActivity : AppCompatActivity() {
         etNoteTitle = findViewById(R.id.etNoteTitle)
         etNoteTags = findViewById(R.id.etNoteTags)
         tvTimestamps = findViewById(R.id.tvTimestamps)
-        btnDeleteNote = findViewById(R.id.btnDeleteNote)
+        btnDeleteNote = findViewById(R.id.btnTrashBlock)
         btnAddBlock = findViewById(R.id.btnAddBlock)
         blockRecyclerView = findViewById(R.id.rvBlocks)
 
-        blockAdapter = BlockAdapter(mutableListOf()) { updatedBlock ->
-            lifecycleScope.launch(Dispatchers.IO) {
-                val db = AppDatabase.getInstance(this@NoteEditorActivity)
-                db.blockDao().update(updatedBlock)
+        blockAdapter = BlockAdapter(
+            mutableListOf(),
+            onBlockChanged = { updatedBlock ->
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val db = AppDatabase.getInstance(this@NoteEditorActivity)
+                    db.blockDao().update(updatedBlock)
+                }
+            },
+            onStartDrag = { view, _, _ ->
+                val shadow = View.DragShadowBuilder(view)
+                ViewCompat.startDragAndDrop(view, null, shadow, view, 0)
             }
+        )
+
+        val trashButton = findViewById<FloatingActionButton>(R.id.btnTrashBlock)
+        trashButton.setOnDragListener { _, event ->
+            when (event.action) {
+                DragEvent.ACTION_DRAG_ENTERED -> {
+                    trashButton.setColorFilter(android.graphics.Color.RED)
+                }
+
+                DragEvent.ACTION_DRAG_EXITED -> {
+                    trashButton.clearColorFilter()
+                }
+
+                DragEvent.ACTION_DROP -> {
+                    trashButton.clearColorFilter()
+                    val draggedView = event.localState as? View ?: return@setOnDragListener true
+                    val recycler = blockRecyclerView
+                    val draggedIndex = recycler.getChildAdapterPosition(draggedView)
+
+                    if (draggedIndex != RecyclerView.NO_POSITION) {
+                        val blockToDelete = blockAdapter.getBlocks()[draggedIndex]
+
+                        AlertDialog.Builder(this)
+                            .setTitle("Delete Block")
+                            .setMessage("Are you sure you want to delete this block?")
+                            .setPositiveButton("Delete") { _, _ ->
+                                lifecycleScope.launch(Dispatchers.IO) {
+                                    AppDatabase.getInstance(this@NoteEditorActivity)
+                                        .blockDao()
+                                        .delete(blockToDelete)
+                                    val updatedBlocks = AppDatabase.getInstance(this@NoteEditorActivity)
+                                        .blockDao()
+                                        .getBlocksForNote(noteId)
+
+                                    withContext(Dispatchers.Main) {
+                                        blockAdapter.updateBlocks(updatedBlocks)
+                                    }
+                                }
+                            }
+                            .setNegativeButton("Cancel", null)
+                            .show()
+                    }
+                }
+
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    trashButton.clearColorFilter()
+                }
+            }
+            true
         }
+
 
         blockRecyclerView.layoutManager = LinearLayoutManager(this)
         blockRecyclerView.adapter = blockAdapter
