@@ -78,23 +78,21 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
                 .setTitle("New Note")
                 .setView(input)
                 .setPositiveButton("Add") { _, _ ->
-                    val content = input.text.toString().trim()
-                    if (content.isNotEmpty()) {
+                    val title = input.text.toString().trim()
+                    if (title.isNotEmpty()) {
                         lifecycleScope.launch(Dispatchers.IO) {
                             val db = AppDatabase.getInstance(this@WorkspaceDetailsActivity)
                             db.noteDao().insert(
                                 Note(
                                     workspaceName = originalName!!,
-                                    title = content,
-                                    content = content,
-                                    createdAt = System.currentTimeMillis(),
-                                    updatedAt = System.currentTimeMillis()
+                                    title = title
                                 )
                             )
                             loadNotesFiltered(tagFilterEdit.text.toString())
                         }
                     }
                 }
+
                 .setNegativeButton("Cancel", null)
                 .show()
         }

@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Workspace::class, Note::class], version = 5, exportSchema = false)
+@Database(entities = [Workspace::class, Note::class, Block::class], version = 6, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun workspaceDao(): WorkspaceDao
-    abstract fun noteDao(): NoteDao  // ✅ add this
+    abstract fun noteDao(): NoteDao
+    abstract fun blockDao(): BlockDao
 
     companion object {
         @Volatile
@@ -21,7 +22,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "notion_database"
                 )
-                    .fallbackToDestructiveMigration() // ✅ required for version bump
+                    .fallbackToDestructiveMigration() // required for version bump
                     .build()
                 INSTANCE = instance
                 instance
