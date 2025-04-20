@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <EditText
+        android:id="@+id/etBlockTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Block Title"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:inputType="text"
+        android:background="@android:color/transparent" />
+
+    <EditText
+        android:id="@+id/etBlockContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Write your block content here..."
+        android:textSize="14sp"
+        android:inputType="textMultiLine"
+        android:maxLines="1000"
+        android:background="@android:color/transparent"
+        android:gravity="top" />
+</LinearLayout>
