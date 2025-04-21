@@ -143,4 +143,21 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
                 .show()
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        val tagFilterEdit = findViewById<EditText>(R.id.etTagFilter)
+        val filter = tagFilterEdit.text.toString()
+        lifecycleScope.launch(Dispatchers.IO) {
+            val db = AppDatabase.getInstance(this@WorkspaceDetailsActivity)
+            val allNotes = db.noteDao().getNotesForWorkspace(originalName!!)
+            val filtered = if (filter.isBlank()) allNotes else allNotes.filter {
+                it.tags.contains(filter, ignoreCase = true)
+            }
+            withContext(Dispatchers.Main) {
+                noteAdapter.updateData(filtered)
+            }
+        }
+    }
+
 }
