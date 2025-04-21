@@ -5,12 +5,20 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <!-- Horizontal container for title + drag handle -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/btnCollapseToggle"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/arrow_down_float"
+            android:contentDescription="Toggle collapse"
+            android:padding="4dp"
+            android:layout_marginEnd="8dp" />
 
         <EditText
             android:id="@+id/etBlockTitle"
@@ -27,10 +35,10 @@
             android:id="@+id/ivDragHandle"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginStart="8dp"
-            android:contentDescription="Drag handle"
             android:src="@android:drawable/ic_menu_sort_by_size"
-            android:padding="4dp" />
+            android:contentDescription="Drag block"
+            android:padding="4dp"
+            android:layout_marginStart="8dp" />
     </LinearLayout>
 
     <EditText
@@ -42,5 +50,6 @@
         android:inputType="textMultiLine"
         android:maxLines="1000"
         android:background="@android:color/transparent"
-        android:gravity="top" />
+        android:gravity="top"
+        android:layout_marginTop="4dp" />
 </LinearLayout>
