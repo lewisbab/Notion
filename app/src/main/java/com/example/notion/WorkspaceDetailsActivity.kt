@@ -27,6 +27,7 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workspace_details)
 
+        // UI references
         val titleTextView = findViewById<TextView>(R.id.tvWorkspaceTitle)
         val nameEditText = findViewById<EditText>(R.id.etEditName)
         val renameButton = findViewById<Button>(R.id.btnRename)
@@ -35,10 +36,12 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
         val fabAddNote = findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fabAddNote)
         val tagFilterEdit = findViewById<EditText>(R.id.etTagFilter)
 
+        // Get workspace name from intent
         originalName = intent.getStringExtra("workspace_name")
         titleTextView.text = originalName
         nameEditText.setText(originalName)
 
+        // Initialize RecyclerView adapter for notes in this workspace
         noteAdapter = NoteAdapter(
             emptyList(),
             onNoteUpdated = { updatedNotes -> noteAdapter.updateData(updatedNotes) },
@@ -47,6 +50,7 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
         notesRecyclerView.layoutManager = LinearLayoutManager(this)
         notesRecyclerView.adapter = noteAdapter
 
+        // Load notes for this workspace, filtered by tag if provided
         fun loadNotesFiltered(filter: String = "") {
             lifecycleScope.launch(Dispatchers.IO) {
                 val db = AppDatabase.getInstance(this@WorkspaceDetailsActivity)
@@ -60,8 +64,10 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
             }
         }
 
+        // Initial load
         loadNotesFiltered()
 
+        // Filter notes by tag as user types
         tagFilterEdit.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -70,6 +76,7 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
             }
         })
 
+        // Handle adding a new note
         fabAddNote.setOnClickListener {
             val input = EditText(this)
             input.hint = "Enter note content"
@@ -92,11 +99,11 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
                         }
                     }
                 }
-
                 .setNegativeButton("Cancel", null)
                 .show()
         }
 
+        // Handle renaming workspace
         renameButton.setOnClickListener {
             val newName = nameEditText.text.toString().trim()
             if (newName.isNotEmpty() && newName != originalName) {
@@ -125,6 +132,7 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
             }
         }
 
+        // Handle deleting workspace
         deleteButton.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Confirm Delete")
@@ -144,6 +152,7 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
         }
     }
 
+    // Refresh notes when returning to this activity
     override fun onResume() {
         super.onResume()
         val tagFilterEdit = findViewById<EditText>(R.id.etTagFilter)
@@ -159,5 +168,4 @@ class WorkspaceDetailsActivity : AppCompatActivity() {
             }
         }
     }
-
 }

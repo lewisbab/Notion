@@ -23,17 +23,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Enables full screen layout with proper system bar padding
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        // Automatically adjust padding based on system bar insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        // Set up the RecyclerView and adapter for displaying a list of workspaces
         recyclerView = findViewById(R.id.recyclerView)
         adapter = WorkspaceAdapter(emptyList()) { workspace ->
+            // On workspace item click, navigate to WorkspaceDetailsActivity with workspace name
             val intent = Intent(this, WorkspaceDetailsActivity::class.java)
             intent.putExtra("workspace_name", workspace.name)
             startActivity(intent)
@@ -41,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
+        // Set up the "Create Workspace" button to navigate to CreateWorkspaceActivity
         val createWorkspaceButton: Button = findViewById(R.id.btnCreateWorkspace)
         createWorkspaceButton.setOnClickListener {
             val intent = Intent(this, CreateWorkspaceActivity::class.java)
@@ -48,11 +54,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Called when the activity becomes visible again; refresh workspace list
     override fun onResume() {
         super.onResume()
         loadWorkspaces()
     }
 
+    // Loads all workspaces from the database asynchronously and updates the UI
     private fun loadWorkspaces() {
         lifecycleScope.launch(Dispatchers.IO) {
             val workspaces = AppDatabase.getInstance(this@MainActivity)

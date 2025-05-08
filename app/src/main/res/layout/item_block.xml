@@ -5,12 +5,14 @@
     android:orientation="vertical"
     android:padding="8dp">
 
+    <!-- Row layout for block title, collapse toggle, and drag handle -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical">
 
+        <!-- Button to toggle collapse/expand of the block's content -->
         <ImageView
             android:id="@+id/btnCollapseToggle"
             android:layout_width="24dp"
@@ -20,6 +22,7 @@
             android:padding="4dp"
             android:layout_marginEnd="8dp" />
 
+        <!-- Editable field for the block's title -->
         <EditText
             android:id="@+id/etBlockTitle"
             android:layout_width="0dp"
@@ -31,6 +34,7 @@
             android:inputType="text"
             android:background="@android:color/transparent" />
 
+        <!-- Drag handle used for rearranging the block -->
         <ImageView
             android:id="@+id/ivDragHandle"
             android:layout_width="24dp"
@@ -41,6 +45,7 @@
             android:layout_marginStart="8dp" />
     </LinearLayout>
 
+    <!-- Editable field for the main content of the block -->
     <EditText
         android:id="@+id/etBlockContent"
         android:layout_width="match_parent"

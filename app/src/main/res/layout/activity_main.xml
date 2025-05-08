@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!-- Title displayed at the top of the main screen -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -19,6 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp" />
 
+    <!-- Button to create a new workspace -->
     <Button
         android:id="@+id/btnCreateWorkspace"
         android:layout_width="wrap_content"
@@ -29,6 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp" />
 
+    <!-- RecyclerView to display the list of workspaces -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"

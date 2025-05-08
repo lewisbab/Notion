@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Layout for a single note item in the list.
+    Displays the note title/content inside a styled TextView.
+-->
+
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tvNoteContent"
     android:layout_width="match_parent"

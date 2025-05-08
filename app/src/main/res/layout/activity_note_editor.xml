@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <!-- EditText for the note title -->
     <EditText
         android:id="@+id/etNoteTitle"
         android:layout_width="0dp"
@@ -17,6 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- EditText for entering tags related to the note -->
     <EditText
         android:id="@+id/etNoteTags"
         android:layout_width="0dp"
@@ -28,6 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- TextView for showing created/updated timestamps -->
     <TextView
         android:id="@+id/tvTimestamps"
         android:layout_width="0dp"
@@ -39,6 +42,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- RecyclerView to display editable blocks within the note -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBlocks"
         android:layout_width="0dp"
@@ -48,10 +52,9 @@
         app:layout_constraintBottom_toTopOf="@id/noteActionButtons"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:clipToPadding="false"
-        />
+        android:clipToPadding="false" />
 
-
+    <!-- Container for action buttons at the bottom of the screen -->
     <LinearLayout
         android:id="@+id/noteActionButtons"
         android:layout_width="wrap_content"
@@ -62,6 +65,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="12dp">
 
+        <!-- Button to add a new block -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnAddBlock"
             android:layout_width="wrap_content"
@@ -69,6 +73,7 @@
             android:contentDescription="Add block"
             app:srcCompat="@android:drawable/ic_input_add" />
 
+        <!-- Button to delete the note or a dragged block -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnTrashBlock"
             android:layout_width="wrap_content"
@@ -77,6 +82,5 @@
             android:contentDescription="Delete note or block"
             app:srcCompat="@android:drawable/ic_menu_delete" />
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

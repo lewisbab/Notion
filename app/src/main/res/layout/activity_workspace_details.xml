@@ -7,6 +7,7 @@
     tools:context=".WorkspaceDetailsActivity"
     android:padding="24dp">
 
+    <!-- Displays the current workspace title -->
     <TextView
         android:id="@+id/tvWorkspaceTitle"
         android:layout_width="wrap_content"
@@ -17,6 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- EditText for renaming the workspace -->
     <EditText
         android:id="@+id/etEditName"
         android:layout_width="0dp"
@@ -27,6 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp" />
 
+    <!-- Button to rename the workspace -->
     <Button
         android:id="@+id/btnRename"
         android:layout_width="0dp"
@@ -37,6 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
+    <!-- Button to delete the current workspace -->
     <Button
         android:id="@+id/btnDelete"
         android:layout_width="0dp"
@@ -47,6 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
+    <!-- Field to filter notes by tag -->
     <EditText
         android:id="@+id/etTagFilter"
         android:layout_width="0dp"
@@ -59,7 +64,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
-
+    <!-- RecyclerView to display the list of notes in the workspace -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notesRecyclerView"
         android:layout_width="0dp"
@@ -70,6 +75,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Floating action button to add a new note -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddNote"
         android:layout_width="wrap_content"
@@ -78,8 +84,6 @@
         android:contentDescription="Add Note"
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

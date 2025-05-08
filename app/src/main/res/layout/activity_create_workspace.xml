@@ -7,6 +7,7 @@
     tools:context=".CreateWorkspaceActivity"
     android:padding="24dp">
 
+    <!-- Input field for entering the name of the new workspace -->
     <EditText
         android:id="@+id/etWorkspaceName"
         android:layout_width="0dp"
@@ -19,6 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="64dp" />
 
+    <!-- Button to trigger workspace creation -->
     <Button
         android:id="@+id/btnCreate"
         android:layout_width="wrap_content"
